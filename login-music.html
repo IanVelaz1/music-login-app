@@ -1,0 +1,159 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/elements/dom-if.html">
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+
+
+<dom-module id="login-music">
+  <template>
+    <style>
+      :host {
+        display: block;
+        width: 300px;
+       margin: 0 auto;
+        color: white;
+      }
+
+      paper-button.boton {
+        border-radius: 8px;
+        background-color: rgb(108, 230, 9);
+      }
+      #picUser{
+        width: 80px;
+        height: 100px;
+        border-radius: 8px;
+        text-align: center;
+        padding-left: 12px;
+      }
+      paper-button.aqui{
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      paper-button.aqui:hover{
+        color: rgb(0, 189, 0);
+        font-size: 18px;
+      }
+      
+      .container{
+        background-color: rgba(0,0,0,0.5);
+        padding: 20px;
+        width: 100%;
+      }
+
+      paper-input{
+        color: white;
+        --paper-input-container-input-color:white;
+      }
+      
+    </style>
+    <div class="container">
+      <div class="logIn" id="log" hidden$="[[toggle]]">
+       
+        <h2>Iniciar sesión</h2>
+        <p>You dont have an account?
+          <paper-button on-tap="registerVisible" class="aqui">Register here</paper-button>
+          <paper-input label="E-mail" value="{{logInObject.userEmail}}">
+            <div slot="suffix">@email.com</div>
+          </paper-input>
+          <paper-input label="Password" type="password" value="{{logInObject.userPassword}}"></paper-input>
+          <paper-button on-tap="logIn" class="boton">Log In</paper-button>
+      </div>
+
+      <div class="signIn" hidden$="[[toggleRegister]]">
+        <h2>Register</h2>
+        <p>Do you already have an account?</p>
+
+        <paper-button on-tap="loginVisible" class="aqui">Log In</paper-button>
+        <paper-input label="User name" value="{{registerObject.userName}}"></paper-input>
+        <paper-input label="Email" value="{{registerObject.userEmail}}"></paper-input>
+        <paper-input label="Password" type="password" value="{{registerObject.userPassword}}"></paper-input>
+        <paper-button on-tap="signIn" class="boton">Register</paper-button>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    /**
+     * `login-music`
+     * 
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class LoginMusic extends Polymer.Element {
+      static get is() {
+        return 'login-music';
+      }
+      static get properties() {
+        return {
+          toggle: {
+            type: Boolean,
+            value: false
+          },
+          toggleRegister: {
+            type: Boolean,
+            value: true
+          },
+          username: {
+            type: String,
+            value: ''
+          },
+          password: {
+            type: String,
+            value: ''
+          },
+          age: {
+            type: String,
+            value: ''
+          },
+          logInObject: {
+            type: Object,
+            value() {
+              return {
+                userEmail: "",
+                userPassword: ""
+              }
+            }
+          },
+          registerObject: {
+            type: Object,
+            value() {
+              return {
+                userName: "",
+                userEmail: "",
+                userPassword: ""
+              }
+            }
+          }
+        };
+      }
+      logIn() {
+        this.dispatchEvent(new CustomEvent('login-user',{
+          bubbles: false,
+          composed: false,
+          detail: this.logInObject
+        }));
+      }
+      signIn() {
+        this.dispatchEvent(new CustomEvent('register-user',{
+          bubbles: false,
+          composed: false,
+          detail: this.registerObject
+        }));
+      }
+      registerVisible() {
+        this.set("toggle", true);
+        this.set("toggleRegister", false);
+      }
+      loginVisible() {
+        this.set("toggle", false);
+        this.set("toggleRegister", true);
+      }
+    }
+
+    window.customElements.define(LoginMusic.is, LoginMusic);
+  </script>
+</dom-module>
